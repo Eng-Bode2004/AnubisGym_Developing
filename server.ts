@@ -1,12 +1,18 @@
 import "dotenv/config";
 import express from "express";
 import "./Config/DataBase.js";
+import cors from "cors";
 import TraineeProfileRoutes from "./Routes/TraineeProfileRoutes.ts";
 // Initialize Express
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors({
+    origin: "*",
+    methods: ["GET","POST","PUT","DELETE","PATCH"],
+    credentials: true
+}));
 
 // Routes
 app.use("/api/v1/trainee-profile", TraineeProfileRoutes);
