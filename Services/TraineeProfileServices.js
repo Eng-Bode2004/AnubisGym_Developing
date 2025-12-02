@@ -1,5 +1,5 @@
 import TraineeProfileModel from "../Models/TraineeProfileModel.js";
-
+import axios from "axios";
 
 class Trainee_Profile_Services {
 
@@ -135,6 +135,33 @@ class Trainee_Profile_Services {
         } catch (error) {
             throw new Error(error.message || 'Error fetching trainee profiles');
         }
+    }
+
+    async getTraineesWithStrengthByTrainer(trainerGender) {
+        if (!trainerGender) throw new Error("Trainer gender is required");
+
+        // Convert to lowercase for case-insensitive match
+        const genderLower = trainerGender.toLowerCase();
+
+        const trainees = await TraineeProfileModel.find({
+            gender: { $regex: new RegExp(`^${genderLower}$`, 'i') } // 'i' for case-insensitive
+        }).lean();
+
+        if (!trainees.length) throw new Error("No trainees found with this gender");
+
+        const enrichedTrainees = await Promise.all(
+            trainees.map(async (t) => {
+                try {
+                    const response = await axios.get(`http://13.48.6.75:5002/api/v1/strength-tracking/${t._id}`);
+                    t.strength_tracking = response.data?.data || null;
+                } catch (err) {
+                    t.strength_tracking = null;
+                }
+                return t;
+            })
+        );
+
+        return enrichedTrainees;
     }
 
 }

@@ -17,4 +17,7 @@ router.put('/update-name/:Trainee_Profile', TraineeProfileController.updateTrain
 
 router.get('/', TraineeProfileController.getAllTrainees);
 
+router.get('/by-trainer-gender/:trainer_id', TraineeProfileController.getTraineesByTrainerGender);
+
+
 export default router;

@@ -1,5 +1,5 @@
 import TraineeProfileServices from "../Services/TraineeProfileServices.js";
-
+import axios from "axios";
 class Trainee_Profile_Controllers {
     async createTraineeProfile(req, res) {
         try {
@@ -103,6 +103,33 @@ class Trainee_Profile_Controllers {
             res.status(500).json({
                 success: false,
                 message: error.message
+            });
+        }
+    }
+
+    async getTraineesByTrainerGender(req, res) {
+        try {
+            const { trainer_id } = req.params;
+
+            // Get trainer profile
+            const trainerRes = await axios.get(`http://13.50.243.163:5000/api/v1/trainer-profile/${trainer_id}`);
+            const trainer = trainerRes.data?.data;
+
+            if (!trainer) return res.status(404).json({ success: false, message: "Trainer not found" });
+
+            // Get trainees of same gender with strength tracking
+            const trainees = await TraineeProfileServices.getTraineesWithStrengthByTrainer(trainer.Gender);
+
+            res.status(200).json({
+                success: true,
+                message: `Trainees with gender '${trainer.Gender}' retrieved successfully`,
+                data: trainees
+            });
+
+        } catch (err) {
+            res.status(400).json({
+                success: false,
+                message: err.response?.data?.message || err.message
             });
         }
     }
