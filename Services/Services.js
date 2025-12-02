@@ -49,16 +49,22 @@ class UserMembershipService {
         const memberships = await UserMembership.find();
 
         for (const membership of memberships) {
-            membership.days_left -= 1;
+            // Correct casing
+            membership.Days_left -= 1;
 
-            if (membership.days_left <= 0 || membership.sessions_left <= 0) {
+            if (membership.Days_left <= 0 || membership.sessions_left <= 0) {
                 await membership.deleteOne();
                 continue;
             }
 
-            await membership.save();
+            try {
+                await membership.save();
+            } catch (err) {
+                console.error("Failed to update membership:", err);
+            }
         }
     }
+
 
     async reduceSession(id) {
         const membership = await UserMembership.findById(id);
