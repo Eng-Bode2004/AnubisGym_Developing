@@ -20,8 +20,3 @@ app.use(cors({
 //  Image Routes //
 ImagesRoutes = require('./Routes/ImagesRoutes');
 app.use('/api/v3/images',ImagesRoutes);
-
-
-
-//npm install --save dotenv express mongoose multer multer-storage-cloudinary nodemon cloudinary@1.41.3
-// |

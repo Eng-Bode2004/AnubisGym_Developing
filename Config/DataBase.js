@@ -8,7 +8,7 @@
 // Cluster Password : Anubis-Gym582004-Password
 
 const mongoose = require('mongoose');
-const mongoURI = 'mongodb+srv://Anubis-Gym-Username2004:Anubis-Gym582004-Password@anubis-cluster.m0jso3k.mongodb.net/?retryWrites=true&w=majority&appName=Anubis-Cluster';
+const mongoURI = 'mongodb+srv://Anubis-Gym-Username2004:9voWYMIoHJBENeGp@role-services.ct5bizh.mongodb.net/?appName=Role-Services';
 
 // Connect to MongoDB Atlas
 mongoose
