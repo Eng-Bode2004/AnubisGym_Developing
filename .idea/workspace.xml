@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a875ec9e-f42d-4104-9b2b-52d6a215c546" name="Changes" comment="" />
+    <list default="true" id="a875ec9e-f42d-4104-9b2b-52d6a215c546" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,6 +48,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;UserMembership-Services&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/zezom/Downloads/Programs/Projects/Anubis/Anubis-Developing/Version one - Bun/User_Memberships-Services&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -73,7 +76,9 @@
       <option name="presentableId" value="Default" />
       <updated>1764658213746</updated>
       <workItem from="1764658215644" duration="305000" />
-      <workItem from="1764659670904" duration="1704000" />
+      <workItem from="1764659670904" duration="3009000" />
+      <workItem from="1764665171246" duration="26000" />
+      <workItem from="1764667032984" duration="292000" />
     </task>
     <servers />
   </component>

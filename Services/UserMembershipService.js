@@ -1,7 +1,7 @@
 import axios from "axios";
 import UserMembership from "../Models/UserMembership.js";
 
-const PLAN_API = "https://anubis-subscriptionplan.onrender.com/api/v2/subscription_plans/";
+const PLAN_API = "http://13.48.6.75:5003/api/v1/subscription-plans/";
 
 class UserMembershipService {
 
