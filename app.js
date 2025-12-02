@@ -7,7 +7,7 @@ require("./Corn/dailyMembershipCheck");
 
 // Set Up Port and Make Server listen To requests
 const app = express();
-const PORT = 5000;
+const PORT = 5007;
 
 app.use(express.json()); // Middleware to parse JSON
 
