@@ -16,8 +16,10 @@ const trainee_profile = require('../Middlewares/Multer-TraineeProfile-Image'); /
 router.post('/trainee-profile', trainee_profile.single('image'), ImagesControllers.uploadPhoto);
 
 const payment_proof = require('../Middlewares/Multer-TrainerProfile-Image'); // parser
-router.post('/payment-proof', trainer_profile.single('image'), ImagesControllers.uploadPhoto);
+router.post('/payment-proof', payment_proof.single('image'), ImagesControllers.uploadPhoto);
 
+const post = require('../Middlewares/Multer-Post-Image'); // parser
+router.post('/post', post.single('image'), ImagesControllers.uploadPhoto);
 
 
 
