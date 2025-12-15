@@ -30,7 +30,6 @@ const TrainerProfileModel = new mongoose.Schema({
 
     experience_years: {
         type: Number,
-        required: true
     },
 
     rating: {
