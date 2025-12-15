@@ -1,7 +1,7 @@
 export default function validateTrainerProfileCreation(req, res, next) {
 
     try {
-        const { name, specialization, experience_years, profile_image,Gender } = req.body;
+        const { name, specialization, profile_image,Gender } = req.body;
 
         if (!name || typeof name !== "object")
             return res.status(400).json({ error: "Name object is required" });
@@ -20,8 +20,6 @@ export default function validateTrainerProfileCreation(req, res, next) {
         if (!Gender)
             return res.status(400).json({ error: "Gender is required" });
 
-        if (!experience_years)
-            return res.status(400).json({ error: "experience_years is required" });
 
         if (!profile_image)
             return res.status(400).json({ error: "profile_image is required" });
