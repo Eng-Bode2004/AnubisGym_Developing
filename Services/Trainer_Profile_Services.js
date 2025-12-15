@@ -61,6 +61,7 @@ class Trainer_Profile_Services {
                 specialization,
                 experience_years,
                 profile_image,
+                isVerified
             } = data;
 
             // Check trainer exists
