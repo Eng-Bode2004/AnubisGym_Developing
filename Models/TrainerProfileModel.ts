@@ -49,8 +49,11 @@ const TrainerProfileModel = new mongoose.Schema({
 
     Gender:{
         type: String,
-    }
+    },
 
+    session_price:{
+        type: Number,
+    }
 
 
 })
