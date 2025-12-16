@@ -16,4 +16,7 @@ router.put('/update/:trainer_id', TrainerProfileController.updateFullTrainerProf
 
 router.put('/verify/:trainer_id', TrainerProfileController.verifyTrainerProfile);
 
+router.get("/by-trainee-gender/:trainee_profile_id", TrainerProfileController.getTrainersByTraineeGender
+);
+
 export default router;

@@ -1,11 +1,20 @@
 import TrainerProfileModel from "../Models/TrainerProfileModel.js";
+import axios from "axios";
 
 class Trainer_Profile_Services {
 
+    /* ===================== CREATE ===================== */
     async createTrainerProfile(data) {
         try {
-            const { name, specialization, experience_years, profile_image , Gender } = data;
-            const { first_name, middle_name, last_name } = name
+            const {
+                name,
+                specialization,
+                experience_years,
+                profile_image,
+                Gender
+            } = data;
+
+            const { first_name, last_name } = name;
 
             const newTrainer = new TrainerProfileModel({
                 name: {
@@ -26,19 +35,27 @@ class Trainer_Profile_Services {
         }
     }
 
+    /* ===================== GET ONE ===================== */
     async getTrainerProfile(id) {
-        const trainer = await TrainerProfileModel.findById(id)
+        const trainer = await TrainerProfileModel
+            .findById(id)
+            .populate("specialization")
+            .populate("trainees");
 
         if (!trainer) throw new Error("Trainer not found");
         return trainer;
     }
 
+    /* ===================== GET ALL ===================== */
     async getAllTrainers() {
-        return await TrainerProfileModel.find()
+        return await TrainerProfileModel
+            .find()
+            .populate("specialization");
     }
 
+    /* ===================== UPDATE NAME ===================== */
     async updateTrainerName(id, nameData) {
-        const { first_name, middle_name, last_name } = nameData;
+        const { first_name, last_name } = nameData;
 
         const updated = await TrainerProfileModel.findByIdAndUpdate(
             id,
@@ -55,20 +72,28 @@ class Trainer_Profile_Services {
         return updated;
     }
 
+    /* ===================== UPDATE FULL PROFILE ===================== */
     async updateFullTrainerProfile(trainerId, data) {
         try {
-            const {
-                specialization,
-                experience_years,
-                profile_image,
-                isVerified
-            } = data;
-
-            // Check trainer exists
             const trainer = await TrainerProfileModel.findById(trainerId);
             if (!trainer) throw new Error("Trainer not found");
 
             const updateData = {};
+
+            if (data.specialization)
+                updateData.specialization = data.specialization;
+
+            if (data.experience_years !== undefined)
+                updateData.experience_years = data.experience_years;
+
+            if (data.profile_image)
+                updateData.profile_image = data.profile_image;
+
+            if (data.Gender)
+                updateData.Gender = data.Gender;
+
+            if (data.session_price !== undefined)
+                updateData.session_price = data.session_price;
 
             const updatedTrainer = await TrainerProfileModel.findByIdAndUpdate(
                 trainerId,
@@ -83,6 +108,7 @@ class Trainer_Profile_Services {
         }
     }
 
+    /* ===================== VERIFY TRAINER ===================== */
     async verifyTrainer(trainerId) {
         try {
             const trainer = await TrainerProfileModel.findById(trainerId);
@@ -98,7 +124,41 @@ class Trainer_Profile_Services {
         }
     }
 
+    /* ===================== MATCH BY TRAINEE GENDER ===================== */
 
+    TRAINEE_API_BASE =
+        "https://trainee-profile.onrender.com/api/v1/trainee-profile";
+
+    async getTrainersByTraineeGender(traineeProfileId) {
+
+        // 1️⃣ Fetch trainee profile from external service
+        const response = await axios.get(
+            `${this.TRAINEE_API_BASE}/${traineeProfileId}`
+        );
+
+        if (!response.data || !response.data.success) {
+            throw new Error("Failed to fetch trainee profile");
+        }
+
+        const traineeGender = response.data.data.gender;
+
+        if (!traineeGender) {
+            throw new Error("Trainee gender not found");
+        }
+
+        // 2️⃣ Fetch matching trainers
+        const trainers = await TrainerProfileModel.find({
+            Gender: traineeGender,
+            isVerified: true
+        })
+            .populate("specialization");
+
+        return {
+            trainee_gender: traineeGender,
+            total_trainers: trainers.length,
+            trainers
+        };
+    }
 }
 
 export default new Trainer_Profile_Services();

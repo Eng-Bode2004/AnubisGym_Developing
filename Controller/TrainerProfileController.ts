@@ -133,6 +133,34 @@ class Trainer_Profile_Controllers {
         }
     }
 
+    async getTrainersByTraineeGender(req: Request, res: Response) {
+        try {
+            const { trainee_profile_id } = req.params;
+
+            const result =
+                await Trainer_Profile_Services.getTrainersByTraineeGender(
+                    trainee_profile_id
+                );
+
+            return res.status(200).json({
+                success: true,
+                message: "Trainer profiles retrieved successfully",
+                data: result
+            });
+
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "Internal server error";
+
+            return res.status(400).json({
+                success: false,
+                error: message
+            });
+        }
+    }
+
 
 }
 
