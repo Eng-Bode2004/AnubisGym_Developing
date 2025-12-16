@@ -151,7 +151,7 @@ class Trainer_Profile_Services {
             Gender: traineeGender,
             isVerified: true
         })
-            .populate("SpecializationModel");
+            .populate("specialization");
 
         return {
             trainee_gender: traineeGender,
