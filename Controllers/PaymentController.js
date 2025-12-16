@@ -1,46 +1,39 @@
 import PaymentService from "../Services/PaymentService.js";
+
 class PaymentController {
 
     async create(req, res) {
         try {
-            const { traineeId, planId, payment_provider, payment_proof } = req.body;
-            const payment = await PaymentService.createPayment({ traineeId, planId, payment_provider, payment_proof });
-            res.status(201).json({ message: 'Payment created successfully', payment });
+            const payment = await PaymentService.createPayment(req.body);
+            res.status(201).json({
+                success: true,
+                data: payment
+            });
         } catch (err) {
-            console.error(err);
-            res.status(err.statusCode || 500).json({ message: err.message });
+            res.status(err.statusCode || 500).json({
+                success: false,
+                message: err.message
+            });
         }
     }
 
-
-    // Complete payment
     async complete(req, res) {
         try {
-            const { paymentId } = req.params;
-            const payment = await PaymentService.completePayment(paymentId);
-            res.json({ message: 'Payment completed successfully', payment });
+            const payment = await PaymentService.completePayment(req.params.paymentId);
+            res.json({ success: true, data: payment });
         } catch (err) {
-            res.status(400).json({ message: err.message });
+            res.status(400).json({ success: false, message: err.message });
         }
     }
 
-    // Optional: get all payments
     async getAll(req, res) {
-        try {
-            const payments = await PaymentService.getAllPayments();
-            res.json({ payments });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
+        const payments = await PaymentService.getAllPayments();
+        res.json({ success: true, count: payments.length, data: payments });
     }
 
-    async getPending(req, res) {
-        try {
-            const payments = await PaymentService.getPendingPayments();
-            res.json({ payments });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
+    async getPendingByTrainer(req, res) {
+        const payments = await PaymentService.getPendingByTrainer(req.params.trainerId);
+        res.json({ success: true, count: payments.length, data: payments });
     }
 }
 

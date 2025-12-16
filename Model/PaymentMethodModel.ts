@@ -1,48 +1,47 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const PaymentMethodModel = new mongoose.Schema({
-    Trainee_Profile: {
+const PaymentMethodSchema = new mongoose.Schema({
+
+    traineeId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'TraineeProfile',
-        required: true,
+        required: true
     },
 
-    trainee_data: {
-        type: Object
+    trainerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     },
 
-    SubscriptionPlan: {
+    workoutScheduleId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'SubscriptionPlans',
-        required: true,
+        required: true
     },
 
     amount: {
         type: Number,
-        required: true,
+        required: true
     },
 
     payment_provider: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'PaymentProvider',
-    },
-
-    status: {
-        type: String,
-        enum: ['pending', 'completed', 'failed', 'refunded'],
-        default: 'pending',
+        ref: "PaymentProvider"
     },
 
     payment_proof: {
         type: String,
+        required: true
+    },
+
+    status: {
+        type: String,
+        enum: ["pending", "completed", "failed", "refunded"],
+        default: "pending"
     },
 
     paid_at: {
-        type: Date,
-    },
+        type: Date
+    }
 
+}, { timestamps: true });
 
-
-},{timestamps:true})
-
-export default mongoose.model('PaymentMethodWorkoutPlans', PaymentMethodModel)
+export default mongoose.model("PaymentMethodWorkoutPlans", PaymentMethodSchema);

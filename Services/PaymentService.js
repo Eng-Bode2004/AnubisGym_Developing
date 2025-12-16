@@ -1,59 +1,64 @@
 import axios from "axios";
 import PaymentMethodModel from "../Model/PaymentMethodModel.js";
-const PLAN_API = "http://13.48.6.75:5003/api/v1/subscription-plans/";
+
+const TRAINER_API =
+    "https://trainer-profile.onrender.com/api/v1/trainer-profile/";
+
+const WORKOUT_API =
+    "https://user-workout-schedule.onrender.com/api/v1/user-workout-schedule/";
 
 class PaymentService {
 
-     async createPayment({ traineeId, planId, payment_provider, payment_proof }) {
-        if (!traineeId || !planId || !payment_provider || !payment_proof) {
-            const error = new Error('Missing required fields');
-            error.statusCode = 400; // mark as client error
+    async createPayment({ traineeId, workoutScheduleId, payment_provider, payment_proof }) {
+
+        if (!traineeId || !workoutScheduleId || !payment_provider || !payment_proof) {
+            const error = new Error("Missing required fields");
+            error.statusCode = 400;
             throw error;
         }
 
-        let planData;
-        try {
-            const response = await axios.get(`${PLAN_API}${planId}`);
-            planData = response.data?.data;
-            if (!planData) {
-                const error = new Error('Subscription plan not found');
-                error.statusCode = 404;
-                throw error;
-            }
-        } catch (err) {
-            const error = new Error(
-                `Failed to fetch subscription plan: ${err.response?.data?.message || err.message}`
-            );
-            error.statusCode = err.response?.status || 502; // 502 Bad Gateway for upstream errors
+        // 1️⃣ Get workout schedule
+        const workoutRes = await axios.get(`${WORKOUT_API}${workoutScheduleId}`);
+        const workout = workoutRes.data?.data;
+
+        if (!workout) {
+            const error = new Error("Workout schedule not found");
+            error.statusCode = 404;
             throw error;
         }
 
-        // create payment
-        const payment = new PaymentMethodModel({
-            Trainee_Profile: traineeId,
-            SubscriptionPlan: planId,
-            amount: planData.price,
+        // 2️⃣ Get trainer profile
+        const trainerRes = await axios.get(`${TRAINER_API}${workout.coach}`);
+        const trainer = trainerRes.data?.data;
+
+        if (!trainer) {
+            const error = new Error("Trainer profile not found");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        // 3️⃣ Calculate amount
+        const amount = trainer.session_price * workout.total_sessions;
+
+        // 4️⃣ Create payment
+        const payment = await PaymentMethodModel.create({
+            traineeId,
+            trainerId: workout.coach,
+            workoutScheduleId,
+            amount,
             payment_provider,
             payment_proof,
-            status: 'pending'
+            status: "pending"
         });
-
-        try {
-            await payment.save();
-        } catch (err) {
-            const error = new Error('Failed to save payment: ' + err.message);
-            error.statusCode = 500;
-            throw error;
-        }
 
         return payment;
     }
 
     async completePayment(paymentId) {
         const payment = await PaymentMethodModel.findById(paymentId);
-        if (!payment) throw new Error('Payment not found');
+        if (!payment) throw new Error("Payment not found");
 
-        payment.status = 'completed';
+        payment.status = "completed";
         payment.paid_at = new Date();
         await payment.save();
 
@@ -61,11 +66,14 @@ class PaymentService {
     }
 
     async getAllPayments() {
-        return PaymentMethodModel.find();
+        return PaymentMethodModel.find().sort({ createdAt: -1 });
     }
 
-    async getPendingPayments() {
-        return PaymentMethodModel.find({ status: 'pending' });
+    async getPendingByTrainer(trainerId) {
+        return PaymentMethodModel.find({
+            trainerId,
+            status: "pending"
+        }).sort({ createdAt: -1 });
     }
 }
 
