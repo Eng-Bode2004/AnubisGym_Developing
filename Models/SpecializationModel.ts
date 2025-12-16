@@ -21,4 +21,4 @@ const SpecializationModel = new mongoose.Schema({
 
 })
 
-export default mongoose.model('Specialization', SpecializationModel)
+export default mongoose.model('specialization', SpecializationModel)
