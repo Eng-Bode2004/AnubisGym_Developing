@@ -43,7 +43,6 @@ class UserWorkoutScheduleService {
     async getById(id) {
         const schedule = await UserWorkoutSchedule
             .findById(id)
-            .populate("trainee coach payment");
 
         if (!schedule) throw new Error("Schedule not found");
         return schedule;
