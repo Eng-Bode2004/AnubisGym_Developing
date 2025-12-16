@@ -1,5 +1,5 @@
 import axios from "axios";
-import PaymentMethodModel from "../Model/PaymentMethodModel.js";
+import PaymentMethodModel from "../Model/PaymentMethodModel.ts";
 
 const TRAINER_API =
     "https://trainer-profile.onrender.com/api/v1/trainer-profile/";
