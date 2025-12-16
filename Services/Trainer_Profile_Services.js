@@ -39,8 +39,6 @@ class Trainer_Profile_Services {
     async getTrainerProfile(id) {
         const trainer = await TrainerProfileModel
             .findById(id)
-            .populate("specialization")
-            .populate("trainees");
 
         if (!trainer) throw new Error("Trainer not found");
         return trainer;
@@ -50,7 +48,6 @@ class Trainer_Profile_Services {
     async getAllTrainers() {
         return await TrainerProfileModel
             .find()
-            .populate("specialization");
     }
 
     /* ===================== UPDATE NAME ===================== */
@@ -146,7 +143,6 @@ class Trainer_Profile_Services {
             throw new Error("Trainee gender not found");
         }
 
-        // 2️⃣ Fetch matching trainers
         const trainers = await TrainerProfileModel.find({
             Gender: traineeGender,
             isVerified: true
