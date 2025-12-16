@@ -1,24 +1,14 @@
-import mongoose from "mongoose"
+// Models/SpecializationModel.js
+import mongoose from "mongoose";
 
-const SpecializationModel = new mongoose.Schema({
-
+const SpecializationSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         unique: true
     },
+    description: String,
+    imageUrl: String
+});
 
-
-    description: {
-        type: String,
-    },
-
-    imageUrl:{
-        type: String,
-    }
-
-
-
-})
-
-export default mongoose.model('SpecializationModel', SpecializationModel)
+export default mongoose.model("Specialization", SpecializationSchema);
